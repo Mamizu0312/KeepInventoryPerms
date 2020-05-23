@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class Event implements Listener {
 
@@ -25,6 +26,7 @@ public class Event implements Listener {
 
         if(p.hasPermission("kip.enable") && plugin.targetworld.contains(p.getWorld().getName())) {
 
+            if(plugin.playerOnOrOff.get(p.getUniqueId()) == null || !plugin.playerOnOrOff.get(p.getUniqueId())) return;
             e.setKeepInventory(true);
 
             e.setKeepLevel(true);
@@ -33,9 +35,20 @@ public class Event implements Listener {
 
             e.setDroppedExp(0);
 
-            p.sendMessage(plugin.prefix + "デスドロップが無効化されました。");
+            p.sendMessage(plugin.prefix + "デスドロップが無効化されました / Deathdrop has been disabled");
+
+            if(plugin.getConfig().getBoolean("logs.DeathdropPreventedLog")) {
+
+                plugin.getLogger().info(plugin.prefix + "次のプレイヤーのデスドロップを無効化しました。 / Disabled deathdrop of :"+p.getName());
+
+            }
 
         }
+
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
 
     }
 }

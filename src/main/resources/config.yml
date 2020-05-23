@@ -1,4 +1,18 @@
+######################
+# KeepInventoryPerms #
+######################
+
+
+#worldsについて / about worlds
+#フォーマットを崩すとエラーが発生する場合があるので注意してください。
+#If formats break, may occur error. please be careful.
 worlds:
   - world
   - world_nether
   - world_the_end
+# - your_world
+logs:
+  #about DeathdropPreventedLog / DeathPreventedLog について
+  #デスドロップが防止された際のログを無効化したい場合は、falseに設定してください。
+  #If you want to disable the log that appears when prevented deathdrop, please set the paramater to false.
+  DeathdropPreventedLog: true

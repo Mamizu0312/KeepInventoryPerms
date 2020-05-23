@@ -22,7 +22,31 @@ public class command implements CommandExecutor{
 
         if(!(sender instanceof Player)) {
 
-            sender.sendMessage(plugin.prefix + "現在未対応");
+            if(args.length == 0 || args[0].equalsIgnoreCase("help")) {
+
+                sender.sendMessage(plugin.prefix);
+
+                sender.sendMessage("kip help   : このページ(ヘルプ)を開きます");
+                sender.sendMessage("          : open this (help) page ");
+
+                sender.sendMessage("kip reload : configファイルをリロードします");
+                sender.sendMessage("          : reload the config file");
+                sender.sendMessage("Developed by Mamizu0312");
+
+                return true;
+
+            }
+
+            if(args[0].equalsIgnoreCase("reload")) {
+
+                plugin.reloadConfig();
+
+                plugin.targetworld = plugin.getConfig().getStringList("worlds");
+
+                sender.sendMessage(plugin.prefix + "configがリロードされました / config has been reloaded");
+
+                return true;
+            }
 
             return true;
 
@@ -36,23 +60,75 @@ public class command implements CommandExecutor{
             p.sendMessage(plugin.prefix);
 
             p.sendMessage("/kip help   : このページ(ヘルプ)を開きます");
+            p.sendMessage("            : open this (help) page ");
 
             p.sendMessage("/kip reload : configファイルをリロードします");
+            p.sendMessage("            : reload the config file");
+            p.sendMessage("Developed by Mamizu0312");
 
             return true;
 
         }
 
-        if(args[0].equalsIgnoreCase("reload")) {
+        if(args.length == 1) {
 
-            plugin.reloadConfig();
+            if(args[0].equalsIgnoreCase("on")) {
 
-            plugin.targetworld = plugin.getConfig().getStringList("worlds");
+                if(!p.hasPermission("kip.enable")) {
 
-            p.sendMessage(plugin.prefix + "configがリロードされました。");
+                    p.sendMessage(plugin.prefix + "§cあなたは権限を持っていません / You don't have permission");
 
-            return true;
+                    return true;
+
+                }
+
+                plugin.playerOnOrOff.put(p.getUniqueId(), true);
+
+                p.sendMessage(plugin.prefix + "デスドロップ防止を有効にしました / Enabled deathdrop prevention");
+
+                return true;
+
+            }
+
+            if(args[0].equalsIgnoreCase("off")) {
+
+                if(!p.hasPermission("kip.enable")) {
+
+                    p.sendMessage(plugin.prefix + "§cあなたは権限を持っていません / You don't have permission");
+
+                    return true;
+
+                }
+
+                plugin.playerOnOrOff.put(p.getUniqueId(), false);
+
+                p.sendMessage(plugin.prefix + "ですドロップ防止を無効にしました / Disabled deathdrop prevention");
+
+                return true;
+
+            }
+
+            if(args[0].equalsIgnoreCase("reload")) {
+
+                if(!p.hasPermission("kip.admin")) {
+
+                    p.sendMessage(plugin.prefix + "§cあなたは権限を持っていません / You don't have permission");
+
+                    return true;
+
+                }
+
+                plugin.reloadConfig();
+
+                plugin.targetworld = plugin.getConfig().getStringList("worlds");
+
+                p.sendMessage(plugin.prefix + "configがリロードされました / Config has been reloaded");
+
+                return true;
+            }
+
         }
+
 
         return true;
     }
